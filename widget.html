@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+
+        <link rel="stylesheet" href="css/style.css">
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="widget-container">
+
+            <div id="widget-header" v-bind:class="widgetHeaderClass">
+                <div v-show="!mainState" v-on:click="setMainState" id="back-button">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div id="widget-header-text-container">
+                    <h2>{{ topHeaderText }}</h2>
+                    <h4 class="opacity-0-8">{{ secondHeaderText }}</h4>
+                </div>
+                <div v-show="mainState" id="widget-header-buttons-container">
+                    <div v-on:click="setChatState" id="chat-button" class="round-button">
+                        <i class="fas fa-comment"></i>
+                    </div>
+                    <div v-on:click="setCallState" id="call-button" class="round-button">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="widget-body">
+                <div v-show="modulesVisible" class="module">
+                    <h5 class="color-dark-blue regular">Рекомендуем</h5>
+                    <div class="module-container">
+                        <div class="product">
+                            <img src="img/pos1.jpg" class="product-img">
+                            <div class="product-text">
+                                <h5 class="color-blue semilight">iPhone X</h5>
+                                <h5 class="color-dark-blue semilight">Просто прекрасен</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="modulesVisible" class="module">
+                    <h5 class="color-dark-blue regular">Опрос</h5>
+                    <div class="module-container">
+                        <h5 class="color-dark-blue semilight mb10">Что нам стоит улучшить?</h5>
+                        <div class="btn blue-btn">Ассортимент</div>
+                        <div class="btn blue-btn">Доставка</div>
+                        <div class="btn blue-btn">Качество</div>
+                    </div>
+                </div>
+
+                <div v-show="modulesVisible" class="module">
+                    <h5 class="color-dark-blue regular">Отзыв</h5>
+                    <div class="module-container">
+                        <h5 class="color-dark-blue semilight mb10">Оцените качество работы</h5>
+                        <div class="btn blue-bordered-btn">Отличное <i class="fas fa-angle-right fa-lg"></i></div>
+                        <div class="btn blue-bordered-btn">Нормальное <i class="fas fa-angle-right fa-lg"></i></div>
+                        <div class="btn blue-bordered-btn">Ужасное <i class="fas fa-angle-right fa-lg"></i></div>
+                    </div>
+                </div>
+
+                <p v-show="offerVisible" id="offer-to-write-msg">Задайте вопрос</p>
+
+                <div v-show="msgContainerVisible" id="msg-container"></div>
+
+                <div v-show="msgPanelVisible" id="msg-panel">
+                    <div onkeypress="return (this.innerText.length <= 256)" contenteditable="true" placeholder="Введите сообщение" id="msg-input" v-on:input="msgContainerMarginControl()">
+
+                    </div>
+
+                    <div id="msg-buttons-container">
+                        <div id="smile-button" class="msg-button">
+                            <i class="far fa-smile fa-lg"></i>
+                        </div>
+
+                        <div id="doc-button" class="msg-button">
+                            <i class="fas fa-paperclip fa-lg"></i>
+                        </div>
+
+                        <div v-on:click="sendMsg" id="send-msg-button" class="msg-button">
+                            <i class="fab fa-telegram-plane fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="callContainerVisible" id="call-container">
+                    <p class="semilight color-dark-blue">
+                        Оставьте своё имя и номер телефона.
+                        В ближайшее время с Вами свяжутся наши
+                        специалисты.
+                    </p>
+
+                    <div contenteditable="true" placeholder="Имя" id="call-name-input" class="call-input">
+
+                    </div>
+
+                    <div contenteditable="true" placeholder="+7 (495) 999-99-99" id="call-number-input" class="call-input">
+
+                    </div>
+
+                    <input type="checkbox" name="checkbox" value="">
+                    <label for="checkbox" class="semilight color-dark-blue">Я согласен на обработку персональных данных.</label>
+
+                    <div class="btn blue-btn">Позвоните мне</div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/components.js"></script>
+
+    </body>
+</html>

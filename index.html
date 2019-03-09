@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Интернет-магазин</title>
+
+        <style media="screen">
+            #f-widget-container {
+                width: 350px;
+                height: 600px;
+                position: fixed;
+                bottom: 130px;
+                right: 30px;
+                user-select: none;
+            }
+            #f-widget-module-iframe {
+                border-radius: 10px;
+                box-shadow: 0 0px 50px 0px #ececec;
+            }
+            #f-widget-button {
+                width: 70px;
+                height: 70px;
+                border-radius: 35px;
+                background-color: #0090FF;
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                display: flex;
+                cursor: pointer;
+            }
+            #f-widget-button i {
+                margin: auto;
+                color: #fff;
+            }
+        </style>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"> -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+
+        <div v-show="seen" id="f-widget-container">
+            <iframe src="widget.html" id="f-widget-module-iframe" width="100%" height="100%" frameborder="no"></iframe>
+        </div>
+
+        <div v-on:click="turnWidget" id="f-widget-button">
+            <i class="fas fa-bars fa-2x"></i>
+        </div>
+
+        <script type="text/javascript">
+            var fWidgetContainer = new Vue({
+                el: '#f-widget-container',
+                data: {
+                    seen: false
+                }
+            })
+
+            var fWidgetButton = new Vue({
+                el: '#f-widget-button',
+                methods: {
+                    turnWidget: function() {
+                        fWidgetContainer.seen = !fWidgetContainer.seen;
+                    }
+                }
+            })
+        </script>
+
+    </body>
+</html>
