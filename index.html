@@ -13,6 +13,12 @@
                 right: 30px;
                 user-select: none;
             }
+            #f-widget-iframe-container {
+                width: 100%;
+                height: 100%;
+                background-color: #fff;
+                border-radius: 10px;
+            }
             #f-widget-module-iframe {
                 border-radius: 10px;
                 box-shadow: 0 0px 50px 0px #ececec;
@@ -32,26 +38,62 @@
                 margin: auto;
                 color: #fff;
             }
+            .widget-body-anim-enter-active,
+            .widget-body-anim-leave-active {
+                transition: .5s;
+            }
+            .widget-body-anim-enter,
+            .widget-body-anim-leave-to {
+                margin-top: 40px;
+                opacity: 0;
+            }
+            @media (max-width: 450px) {
+                #f-widget-container {
+                    z-index: 1;
+                    border-radius: 0px;
+                    width: 100%;
+                    height: 100%;
+                    top: 0px;
+                    right: 0px;
+                }
+                #f-widget-module-iframe {
+                    border-radius: 0px;
+                    box-shadow: 5 5px 1px 2px #ececec;
+                }
+                #f-widget-button {
+                    z-index: 0;
+                }
+            }
         </style>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     </head>
     <body>
 
-        <div v-show="seen" id="f-widget-container">
-            <iframe src="widget.html" id="f-widget-module-iframe" width="100%" height="100%" frameborder="no"></iframe>
+        <div id="f-widget-container" >
+            <transition name="widget-body-anim">
+                <div id="f-widget-iframe-container" v-if="seen" style="">
+                    <iframe src="widget.html" id="f-widget-module-iframe" width="100%" height="100%" frameborder="no"></iframe>
+                </div>
+            </transition>
         </div>
 
         <div v-on:click="turnWidget" id="f-widget-button">
-            <i class="fas fa-bars fa-2x"></i>
+            <i id="f-widget-button-icon" class="fas fa-bars fa-2x"></i>
         </div>
-
         <script type="text/javascript">
+            window.onload = function () {
+                localStorage.setItem('mainState', true);
+                localStorage.setItem('chatState', false);
+                localStorage.setItem('callState', false);
+                localStorage.removeItem('messages');
+            }
+
             var fWidgetContainer = new Vue({
                 el: '#f-widget-container',
                 data: {
-                    seen: false
+                    seen: false,
                 }
             })
 
@@ -59,11 +101,26 @@
                 el: '#f-widget-button',
                 methods: {
                     turnWidget: function() {
+                        // let cont = document.getElementById('f-widget-container');
+                        // let frameCont = document.getElementById('f-widget-iframe-container');
+                        // if (!fWidgetContainer.seen) cont.style= '';
+                        // setTimeout(function () {
+                        //     if (frameCont.style.display === 'none') {
+                        //         cont.style.display = 'none';
+                        //     }
+                        // }, 1000)
+
                         fWidgetContainer.seen = !fWidgetContainer.seen;
+                        let icon = document.getElementById('f-widget-button-icon');
+                        if (fWidgetContainer.seen) {
+                            icon.className = 'fas fa-times fa-2x animated rotateIn';
+                        } else {
+                            icon.className = 'fas fa-bars fa-2x animated flipInX';
+                        }
                     }
                 }
             })
-        </script>
 
+        </script>
     </body>
 </html>

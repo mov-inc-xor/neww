@@ -1,26 +1,34 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ru" dir="ltr">
     <head>
         <meta charset="utf-8">
         <title></title>
 
         <link rel="stylesheet" href="css/style.css">
-
+        <link rel="stylesheet" href="css/myanimations.css">
+        <link rel="stylesheet" href="css/animate.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/imask"></script>
     </head>
     <body>
         <div id="widget-container">
-
             <div id="widget-header" v-bind:class="widgetHeaderClass">
-                <div v-show="!mainState" v-on:click="setMainState" id="back-button">
+                <transition mode="out-in"
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut"
+                duration="200ms">
+                <div id="widget-header-container" v-bind:key="headerState">
+                <div v-if="!mainState && !neutralState" v-on:click="setMainState" id="back-button">
                     <i class="fas fa-chevron-left"></i>
                 </div>
+
                 <div id="widget-header-text-container">
                     <h2>{{ topHeaderText }}</h2>
                     <h4 class="opacity-0-8">{{ secondHeaderText }}</h4>
                 </div>
-                <div v-show="mainState" id="widget-header-buttons-container">
+
+                <div v-if="mainState && !neutralState" id="widget-header-buttons-container">
                     <div v-on:click="setChatState" id="chat-button" class="round-button">
                         <i class="fas fa-comment"></i>
                     </div>
@@ -28,91 +36,122 @@
                         <i class="fas fa-phone"></i>
                     </div>
                 </div>
+                </div>
+                </transition>
             </div>
 
             <div id="widget-body">
-                <div v-show="modulesVisible" class="module">
-                    <h5 class="color-dark-blue regular">Рекомендуем</h5>
-                    <div class="module-container">
-                        <div class="product">
-                            <img src="img/pos1.jpg" class="product-img">
-                            <div class="product-text">
-                                <h5 class="color-blue semilight">iPhone X</h5>
-                                <h5 class="color-dark-blue semilight">Просто прекрасен</h5>
+                <div id="modules-container" style="width: 100%">
+                    <div class="module" v-show="modulesVisible">
+                        <h5 class="color-dark-blue regular">Рекомендуем</h5>
+                        <div class="module-container">
+                            <div class="product">
+                                <img src="img/pos1.jpg" class="product-img">
+                                <div class="product-text">
+                                    <h5 class="color-blue semilight">iPhone X</h5>
+                                    <h5 class="color-dark-blue semilight">Просто прекрасен</h5>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div v-show="modulesVisible" class="module">
-                    <h5 class="color-dark-blue regular">Опрос</h5>
-                    <div class="module-container">
-                        <h5 class="color-dark-blue semilight mb10">Что нам стоит улучшить?</h5>
-                        <div class="btn blue-btn">Ассортимент</div>
-                        <div class="btn blue-btn">Доставка</div>
-                        <div class="btn blue-btn">Качество</div>
-                    </div>
-                </div>
-
-                <div v-show="modulesVisible" class="module">
-                    <h5 class="color-dark-blue regular">Отзыв</h5>
-                    <div class="module-container">
-                        <h5 class="color-dark-blue semilight mb10">Оцените качество работы</h5>
-                        <div class="btn blue-bordered-btn">Отличное <i class="fas fa-angle-right fa-lg"></i></div>
-                        <div class="btn blue-bordered-btn">Нормальное <i class="fas fa-angle-right fa-lg"></i></div>
-                        <div class="btn blue-bordered-btn">Ужасное <i class="fas fa-angle-right fa-lg"></i></div>
-                    </div>
-                </div>
-
-                <p v-show="offerVisible" id="offer-to-write-msg">Задайте вопрос</p>
-
-                <div v-show="msgContainerVisible" id="msg-container"></div>
-
-                <div v-show="msgPanelVisible" id="msg-panel">
-                    <div onkeypress="return (this.innerText.length <= 256)" contenteditable="true" placeholder="Введите сообщение" id="msg-input" v-on:input="msgContainerMarginControl()">
-
-                    </div>
-
-                    <div id="msg-buttons-container">
-                        <div id="smile-button" class="msg-button">
-                            <i class="far fa-smile fa-lg"></i>
+                    <div class="module" v-show="modulesVisible">
+                        <h5 class="color-dark-blue regular">Опрос</h5>
+                        <div id="poll-not-submited-container" class="module-container" v-show="!pollSubmited">
+                            <h5 class="color-dark-blue semilight mb10">Что нам стоит улучшить?</h5>
+                            <div class="btn blue-btn" v-for="option in options" v-on:click="submitPoll(option)">{{ option }}</div>
                         </div>
-
-                        <div id="doc-button" class="msg-button">
-                            <i class="fas fa-paperclip fa-lg"></i>
+                        <div id="poll-submited-container" v-show="pollSubmited">
+                            <div id="check-poll-icon"><i class="fas fa-check fa-2x"></i></div>
+                            <h5 class="color-dark-blue opacity-0-8 semilight">Спасибо за ответ<h5>
                         </div>
+                    </div>
 
-                        <div v-on:click="sendMsg" id="send-msg-button" class="msg-button">
-                            <i class="fab fa-telegram-plane fa-lg"></i>
+                    <div class="module" v-show="modulesVisible">
+                        <h5 class="color-dark-blue regular">Отзыв</h5>
+                        <div class="module-container">
+                            <h5 class="color-dark-blue semilight mb10">Оцените качество работы</h5>
+                            <div class="btn blue-bordered-btn">Отличное <i class="fas fa-angle-right fa-lg"></i></div>
+                            <div class="btn blue-bordered-btn">Нормальное <i class="fas fa-angle-right fa-lg"></i></div>
+                            <div class="btn blue-bordered-btn">Ужасное <i class="fas fa-angle-right fa-lg"></i></div>
                         </div>
                     </div>
                 </div>
 
-                <div v-show="callContainerVisible" id="call-container">
-                    <p class="semilight color-dark-blue">
-                        Оставьте своё имя и номер телефона.
-                        В ближайшее время с Вами свяжутся наши
-                        специалисты.
-                    </p>
+                <transition name="anim-chat">
+                    <div id="chat-container" v-show="msgContainerVisible" style="width: 100%">
+                        <p v-show="offerVisible" id="offer-to-write-msg">Задайте вопрос</p>
 
-                    <div contenteditable="true" placeholder="Имя" id="call-name-input" class="call-input">
+                        <div v-show="msgContainerVisible" id="msg-container"></div>
 
+                        <div v-show="msgPanelVisible" id="msg-panel">
+                            <div onkeypress="return (this.innerText.length <= 256)" contenteditable="true" placeholder="Введите сообщение" id="msg-input" v-on:input="msgContainerMarginControl()">
+                            </div>
+
+                            <div id="msg-buttons-container">
+                                <div id="smile-button" class="msg-button">
+                                    <i class="far fa-smile fa-lg"></i>
+                                </div>
+
+                                <div id="doc-button" class="msg-button">
+                                    <i class="fas fa-paperclip fa-lg"></i>
+                                </div>
+
+                                <div v-on:click="sendMsg" id="send-msg-button" class="msg-button">
+                                    <i class="fab fa-telegram-plane fa-lg"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </transition>
 
-                    <div contenteditable="true" placeholder="+7 (495) 999-99-99" id="call-number-input" class="call-input">
 
+                <transition name="anim-call">
+                    <div id="call-container" v-show="callContainerVisible">
+                        <div id="call-not-submited-container" v-show="!callSubmited">
+                            <p class="semilight color-dark-blue">
+                                Оставьте своё имя и номер телефона.
+                                В ближайшее время с Вами свяжутся наши
+                                специалисты.
+                            </p>
+
+                            <div class="call-input-container">
+                                <input spellcheck="false" placeholder="Введите имя" id="call-name-input" class="call-input" type="text" name="field-name" autocomplete="off"/>
+                            </div>
+
+                            <div class="call-input-container">
+                                <div class="countries-container" v-on:click="toggleMenuCountries()">
+                                    <img class="img-country" v-bind:src="'img/countries/' + countries[currentCountry]['Сокращение'] + '.png'"><i class="fas fa-angle-down"></i>
+                                    <ul v-show="showCountries">
+                                      <li v-for="(value, key) in countries" v-on:click="setCurrentCountry(key)">
+                                        <img class="img-country" v-bind:src="'img/countries/' + countries[key]['Сокращение'] + '.png'"> {{ key }} <span> {{ value['Код'] }}
+                                      </li>
+                                    </ul>
+                                </div>
+                                <p id="number-code">{{ countries[currentCountry]['Код'] }}</p>
+                                <input v-bind:placeholder="countries[currentCountry]['Номер'].replace(/0/g, '9')" id="call-number-input" class="call-input" type="text" name="field-name" autocomplete="off"/>
+                            </div>
+
+                            <input type="checkbox" name="checkbox" id="call-check-box" style="cursor:pointer;" v-on:click="toggleCheckBox()">
+                            <label for="checkbox" class="semilight color-dark-blue">Я согласен на обработку персональных данных.</label>
+
+                            <div id="call-button-submit" class="btn" v-bind:class="checkBoxChecked ? 'blue-btn' : 'blur-btn'" v-on:click="submitCall()">Позвоните мне</div>
+                        </div>
+                        <div id="call-submited-container" v-show="callSubmited">
+                            <div id="call-sumbut-icon" class="round-button"><i class="fas fa-headset fa-2x"></i></div>
+                            <p class="semilight color-dark-blue">
+                                Спасибо за заявку! В течение нескольких минут Вам перезвонят наши специалисты.
+                            </p>
+                            <div id="call-button-submit" class="btn blue-btn" v-on:click="toggleCallSubmit()">Заказать еще раз</div>
+                        </div>
                     </div>
-
-                    <input type="checkbox" name="checkbox" value="">
-                    <label for="checkbox" class="semilight color-dark-blue">Я согласен на обработку персональных данных.</label>
-
-                    <div class="btn blue-btn">Позвоните мне</div>
-                </div>
+                </transition>
             </div>
         </div>
 
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/components.js"></script>
+        <script type="text/javascript" src="js/chat.js"></script>
 
     </body>
 </html>

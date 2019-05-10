@@ -1,0 +1,54 @@
+.anim-chat-enter-active,
+.anim-chat-leave-active {
+    transition: 1s;
+}
+
+.anim-chat-enter,
+.anim-chat-leave-to {
+    opacity: 0;
+}
+
+.anim-call-enter-active,
+.anim-call-leave-active {
+    transition: 1s;
+}
+
+.anim-call-enter,
+.anim-call-leave-to {
+    opacity: 0;
+}
+
+.widget-header-height-15 {
+    height: 30px;
+    transition: 0.4s;
+}
+
+.widget-header-height-40 {
+    height: 40px;
+    transition: 0.4s;
+}
+
+.widget-header-height-55 {
+    height: 55px;
+    transition: 0.4s;
+}
+
+.widget-header-height-75 {
+    height: 75px;
+    transition: 0.4s;
+}
+
+.show-module,
+.hide-module {
+    transition: 0.3s
+}
+
+.hide-module {
+    margin-top: 20px;
+    opacity: 0;
+}
+
+.show-module {
+    margin-top: 0px;
+    opacity: 1;
+}

@@ -47,10 +47,12 @@ i {
     display: flex;
     z-index: 10;
 }
+#widget-header-container {
+    display: flex;
+}
 
 .widget-header-chat {
-    position: fixed;
-    width: 100%;
+    /* width: 100%; */
 }
 
 #widget-body {
@@ -105,7 +107,7 @@ i {
     width: 45px;
     height: 45px;
     display: inline-flex;
-    border-radius: 30px;
+    border-radius: 50%;
     cursor: pointer;
 }
 
@@ -135,6 +137,8 @@ i {
 }
 
 .module {
+    margin-top: 20px;
+    opacity: 0;
     padding: 20px 25px;
     border-bottom: 1px solid #f5f5f5;
 }
@@ -167,8 +171,16 @@ i {
     user-select: none;
 }
 
+.blur-btn {
+    background-color: var(--blue);
+    opacity: 0.5;
+    cursor: default;
+    transition: 0.5s;
+}
+
 .blue-btn {
     background-color: var(--blue);
+    transition: 0.5s;
 }
 
 .blue-btn:hover {
@@ -204,7 +216,7 @@ i {
 
 #back-button {
     display: flex;
-    width: 40px;
+    min-width: 40px;
     height: 40px;
     opacity: 0.2;
     font-size: 20px;
@@ -233,6 +245,8 @@ i {
     outline: none;
     font-size: 15px;
     word-break: break-all;
+    width: 225px;
+    cursor: text;
 }
 
 #msg-input::before {
@@ -274,35 +288,133 @@ i {
     color: var(--blue-active);
 }
 
-#call-container {
-    margin: 25px;
+#poll-submited-container {
+    height: 100px;
+    text-align: center;
+    padding-top: 10px;
 }
 
-.call-input {
+#check-poll-icon {
+    border-radius: 50%;
+    background-color: var(--green);
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+#call-container {
+    padding: 5px 25px;
+}
+
+.call-input-container {
     padding: 10px 15px;
     color: var(--dark-blue);
     background-color: #FCFCFC;
     border-radius: 5px;
     border: 1px solid #F3F3F3;
-    outline: none;
     margin-bottom: 15px;
+    transition: 0.5s;
 }
 
-.call-input::before {
-    content: attr(placeholder);
+.call-input {
+    outline: none;
+    border: none;
+    background-color: #FCFCFC;
+    color: var(--dark-blue);
+    font-family: Segoe UI, sans-serif;
+    font-size: 12pt;
 }
 
-.call-input:not(:empty)::before {
-    content: '';
+::-webkit-input-placeholder {
+  color: #b9b9b9;
 }
 
-.call-input::placeholder {
-    color: #a1adc3;
+.countries-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: sub;
+    max-height: 20px;
+    z-index: 100;
+    width: 35px;
+    cursor: pointer;
+}
+
+.img-country {
+    height: 20px;
+    width: 20px;
+}
+
+.countries-container i {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 14pt;
+    color: var(--blue-hover);
+}
+
+.countries-container ul {
+    position: absolute;
+    border: 1px solid #eaeaea;
+    border-radius: 0px 0px 5px 5px;
+    overflow: hidden;
+    left: -15px;
+    top: 30px;
+    margin: 0;
+    padding-left: 0;
+    width: 220px;
+    background-color: #ffffff;
+}
+
+.countries-container ul li{
+    position: relative;
+    padding: 10px;
+    list-style-type: none;
+    cursor: pointer;
+}
+
+.countries-container ul li img{
+    vertical-align: bottom;
+}
+
+.countries-container ul li:hover {
+    background-color: #F1F1F1;
+}
+
+.countries-container ul li span {
+    color: var(--blue);
+}
+
+#call-number-input {
+    display: inline-block;
+    width: 65%;
+}
+#call-name-input {
+    width: 100%;
+}
+#number-code {
+    display: inline-block;
+    width:auto;
+    margin: 0;
+    color: #2a8dda;
+}
+
+#call-submited-container {
+    padding-top: 50px;
+    text-align: center;
+}
+
+#call-sumbut-icon {
+    height: 110px;
+    width: 110px;
+    background-color: #5b0099;
+    font-size: 28pt;
+    cursor: default;
 }
 
 #msg-container {
-    padding-top: 120px;
-    /* margin-bottom: 60px; */
+    padding-top: 30px;
+    margin-bottom: 55px !important; 
 }
 
 .msg {
