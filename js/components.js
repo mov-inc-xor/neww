@@ -1,8 +1,8 @@
 var widgetHeader = new Vue({
     el: '#widget-header',
     data: {
-        topHeaderText: 'Спортмастер',
-        secondHeaderText: 'Воспользуйтесь нашим виджетом',
+        topHeaderText: 'Привет 👋🏻',
+        secondHeaderText: 'Напишите нам или закажите бесплатный звонок',
 
         mainState: true,
         chatState: false,
@@ -10,8 +10,8 @@ var widgetHeader = new Vue({
     },
     methods: {
         setMainState: function() {
-            widgetHeader.topHeaderText = 'Спортмастер';
-            widgetHeader.secondHeaderText = 'Воспользуйтесь нашим виджетом';
+            widgetHeader.topHeaderText = 'Привет 👋🏻';
+            widgetHeader.secondHeaderText = 'Напишите нам или закажите бесплатный звонок';
 
             this.mainState = true;
             this.chatState = false;
@@ -20,7 +20,7 @@ var widgetHeader = new Vue({
         },
         setChatState: function() {
             widgetHeader.topHeaderText = 'Чат';
-            widgetHeader.secondHeaderText = '2 консультанта (-ов) онлайн';
+            widgetHeader.secondHeaderText = 'Задайте свой вопрос здесь';
 
             this.mainState = false;
             this.chatState = true;
@@ -29,7 +29,7 @@ var widgetHeader = new Vue({
         },
         setCallState: function() {
             widgetHeader.topHeaderText = 'Заказать звонок';
-            widgetHeader.secondHeaderText = '';
+            widgetHeader.secondHeaderText = 'В течение близжайшего времени с Вами свяжутся наши специалисты';
 
             this.mainState = false;
             this.chatState = false;
@@ -45,7 +45,7 @@ var widgetHeader = new Vue({
             }
         }
     }
-})
+});
 
 var widgetBody = new Vue({
     el: '#widget-body',
@@ -54,7 +54,7 @@ var widgetBody = new Vue({
     },
     methods: {
         sendMsg: function() {
-            addClientMsgOnDom();
+            sendMsg();
         },
         msgContainerMarginControl: function() {
             let msgContainer = document.getElementById('msg-container');
@@ -80,38 +80,7 @@ var widgetBody = new Vue({
             return widgetHeader.chatState && this.msgContainerEmpty;
         }
     }
-})
-
-let addClientMsgOnDom = () => {
-    let msgContainer = document.getElementById('msg-container');
-    let msgInput = document.getElementById('msg-input');
-
-    if (isStrEmpty(msgInput.innerText)) {
-        return;
-    }
-
-    let div = document.createElement('div');
-    div.className = 'msg client-msg';
-
-    let time = document.createElement('span');
-    time.className = 'time';
-    time.innerText = '11:11';
-
-    let msg = document.createElement('p');
-    msg.className = 'semilight color-dark-blue';
-    msg.innerText = msgInput.innerText.trim();
-
-    div.appendChild(time);
-    div.appendChild(msg);
-
-    msgContainer.appendChild(div);
-
-    msgInput.innerText = '';
-
-    widgetBody.msgContainerEmpty = false;
-
-    widgetBody.msgContainerMarginControl();
-}
+});
 
 (function enterAndShiftChanges() {
     let msgInput = document.getElementById('msg-input');
@@ -121,21 +90,9 @@ let addClientMsgOnDom = () => {
             if (event.shiftKey==1) {
                 return true;
             } else {
-                addClientMsgOnDom();
+                sendMsg();
                 return false;
             }
         }
     }
 })();
-
-let isStrEmpty = (str) => {
-    if (str != null && typeof str !== "undefined") {
-       str = str.trim();
-    }
-
-    if (!str) {
-       return true;
-    }
-
-    return false;
-}

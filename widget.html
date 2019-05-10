@@ -17,7 +17,7 @@
                     <i class="fas fa-chevron-left"></i>
                 </div>
                 <div id="widget-header-text-container">
-                    <h2>{{ topHeaderText }}</h2>
+                    <h1>{{ topHeaderText }}</h1>
                     <h4 class="opacity-0-8">{{ secondHeaderText }}</h4>
                 </div>
                 <div v-show="mainState" id="widget-header-buttons-container">
@@ -35,10 +35,18 @@
                     <h5 class="color-dark-blue regular">Рекомендуем</h5>
                     <div class="module-container">
                         <div class="product">
-                            <img src="img/pos1.jpg" class="product-img">
+                            <!-- <img src="img/pos1.jpg" class="product-img"> -->
                             <div class="product-text">
                                 <h5 class="color-blue semilight">iPhone X</h5>
-                                <h5 class="color-dark-blue semilight">Просто прекрасен</h5>
+                                <h5 class="color-dark-blue semilight">Такой айфон</h5>
+                            </div>
+                        </div>
+
+                        <div class="product">
+                            <!-- <img src="img/pos1.jpg" class="product-img"> -->
+                            <div class="product-text">
+                                <h5 class="color-blue semilight">iPhone XS</h5>
+                                <h5 class="color-dark-blue semilight">Другой айфон</h5>
                             </div>
                         </div>
                     </div>
@@ -69,21 +77,24 @@
                 <div v-show="msgContainerVisible" id="msg-container"></div>
 
                 <div v-show="msgPanelVisible" id="msg-panel">
+
+                    <div id="msg-left-buttons-container">
+                        <div id="doc-button" class="msg-button">
+                            <i class="fas fa-paperclip fa-lg"></i>
+                        </div>
+                    </div>
+
                     <div onkeypress="return (this.innerText.length <= 256)" contenteditable="true" placeholder="Введите сообщение" id="msg-input" v-on:input="msgContainerMarginControl()">
 
                     </div>
 
-                    <div id="msg-buttons-container">
+                    <div id="msg-right-buttons-container">
                         <div id="smile-button" class="msg-button">
                             <i class="far fa-smile fa-lg"></i>
                         </div>
 
-                        <div id="doc-button" class="msg-button">
-                            <i class="fas fa-paperclip fa-lg"></i>
-                        </div>
-
                         <div v-on:click="sendMsg" id="send-msg-button" class="msg-button">
-                            <i class="fab fa-telegram-plane fa-lg"></i>
+                            <i class="fas fa-chevron-circle-up fa-lg"></i>
                         </div>
                     </div>
                 </div>
@@ -111,7 +122,7 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/chat.js"></script>
         <script type="text/javascript" src="js/components.js"></script>
 
     </body>
