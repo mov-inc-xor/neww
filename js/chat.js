@@ -49,7 +49,12 @@ let sendMsg = () => {
     let msgText = msgInput.innerText.trim();
 
     let date = new Date();
-    let time = date.getHours() + ':' + date.getMinutes();
+    var options = {
+        timezone: 'UTC',
+        hour: 'numeric',
+        minute: 'numeric',
+    };
+    let time = date.toLocaleString("ru", options);
 
     msgWs.send(JSON.stringify({
         channel: channel,
@@ -68,7 +73,7 @@ let addConsultantMsgOnDom = (msgTime, msgText) => {
     div.className = 'msg consultant-msg';
 
     let time = document.createElement('span');
-    time.className = 'time';
+    time.className = 'time left-10';
     time.innerText = msgTime;
 
     let msg = document.createElement('p');
@@ -83,6 +88,11 @@ let addConsultantMsgOnDom = (msgTime, msgText) => {
     widgetBody.msgContainerEmpty = false;
 
     widgetBody.msgContainerMarginControl();
+
+    var audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = 'income_msg.mp3';
+    audio.play();
 };
 
 let isStrEmpty = (str) => {

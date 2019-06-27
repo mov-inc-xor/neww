@@ -1,47 +1,75 @@
+const firstHiHeader = 'Привет';
+const secondHiHeader = 'Напишите нам или закажите бесплатный звонок';
+
+const firstChatHeader = 'Чат';
+const secondChatHeader = 'Задайте свой вопрос здесь';
+
+const firstCallHeader = 'Заказать звонок';
+const secondCallHeader = '';
+
+const STATES = {
+    MAIN: 0,
+    CHAT: 1,
+    CALL: 2
+};
+
+let globalState = {
+
+    firstHeader: firstHiHeader,
+    secondHeader: secondHiHeader,
+    state: STATES.MAIN,
+
+    setMainState: function() {
+        this.firstHeader = firstHiHeader;
+        this.secondHeader = secondHiHeader;
+
+        this.state = STATES.MAIN;
+
+        document.documentElement.scrollTop = 0;
+    },
+    setChatState: function() {
+        this.firstHeader = firstChatHeader;
+        this.secondHeader = secondChatHeader;
+
+        this.state = STATES.CHAT;
+        setTimeout(function() { document.documentElement.scrollTop = document.documentElement.scrollHeight; }, 1);
+    },
+    setCallState: function() {
+        this.firstHeader = firstCallHeader;
+        this.secondHeader = secondCallHeader;
+
+        this.state = STATES.CALL;
+    }
+};
+
 var widgetHeader = new Vue({
     el: '#widget-header',
     data: {
-        topHeaderText: 'Привет 👋🏻',
-        secondHeaderText: 'Напишите нам или закажите бесплатный звонок',
-
-        mainState: true,
-        chatState: false,
-        callState: false,
+        gState: globalState,
     },
     methods: {
         setMainState: function() {
-            widgetHeader.topHeaderText = 'Привет 👋🏻';
-            widgetHeader.secondHeaderText = 'Напишите нам или закажите бесплатный звонок';
-
-            this.mainState = true;
-            this.chatState = false;
-            this.callState = false;
-            document.documentElement.scrollTop = 0;
+            this.gState.setMainState();
         },
         setChatState: function() {
-            widgetHeader.topHeaderText = 'Чат';
-            widgetHeader.secondHeaderText = 'Задайте свой вопрос здесь';
-
-            this.mainState = false;
-            this.chatState = true;
-            this.callState = false;
-            setTimeout(function() { document.documentElement.scrollTop = document.documentElement.scrollHeight; }, 1);
+            this.gState.setChatState();
         },
         setCallState: function() {
-            widgetHeader.topHeaderText = 'Заказать звонок';
-            widgetHeader.secondHeaderText = 'В течение близжайшего времени с Вами свяжутся наши специалисты';
-
-            this.mainState = false;
-            this.chatState = false;
-            this.callState = true;
+            this.gState.setCallState();
         }
     },
     computed: {
+        backButtonVisible: function () {
+            return this.gState.state != STATES.MAIN;
+        },
+        chatCallButtonsVisible: function() {
+            return this.gState.state == STATES.MAIN;
+        },
         widgetHeaderClass: function() {
             return {
-                'justify-space-between': this.mainState,
-                'justify-start': !this.mainState,
-                'widget-header-chat': this.chatState
+                'justify-space-between': this.gState.state == STATES.MAIN,
+                'justify-start': this.gState.state != STATES.MAIN,
+                'widget-header-chat': this.gState.state == STATES.CHAT
             }
         }
     }
@@ -50,7 +78,8 @@ var widgetHeader = new Vue({
 var widgetBody = new Vue({
     el: '#widget-body',
     data: {
-        msgContainerEmpty: true
+        msgContainerEmpty: true,
+        gState: globalState
     },
     methods: {
         sendMsg: function() {
@@ -65,19 +94,19 @@ var widgetBody = new Vue({
     },
     computed: {
         modulesVisible: function() {
-            return widgetHeader.mainState;
+            return this.gState.state == STATES.MAIN;
         },
         msgPanelVisible: function() {
-            return widgetHeader.chatState;
+            return this.gState.state == STATES.CHAT;
         },
         callContainerVisible: function() {
-            return widgetHeader.callState;
+            return this.gState.state == STATES.CALL;
         },
         msgContainerVisible: function() {
-            return widgetHeader.chatState;
+            return this.gState.state == STATES.CHAT;
         },
         offerVisible: function() {
-            return widgetHeader.chatState && this.msgContainerEmpty;
+            return this.gState.state == STATES.CHAT && this.msgContainerEmpty;
         }
     }
 });
